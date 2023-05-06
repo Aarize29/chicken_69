@@ -2,27 +2,16 @@ import React, { useEffect, useState } from 'react'
 import './Home.css'
 import NavBar from "/src/components/NavBar/Navbar"
 import { Link, useNavigate } from 'react-router-dom'
-import { supabase } from '../../supabase/config'
+import { auth } from '../../firebase'
 const Home = () => {
 
   const [session, setSession] = useState(null)
   const navigate = useNavigate()
   useEffect(() => { 
-    const call = async () => {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        setSession(session)
-      })
-      const response = await supabase.auth.getSession()
-      setSession(response.data.session)
-
-      console.log(session)
-  
-      if(session)
-        console.log("Logged")
-      else
-      console.log("Not Logged")
+    if(!auth.currentUser){
+      navigate('/')
     }
-    call()
+    
 
   }, [])
 
